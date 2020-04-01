@@ -8,7 +8,7 @@ rm -rf vendor/ \
     && mkdir -p vendor/ \
     && /usr/bin/composer self-update \
     && /usr/bin/composer clearcache \
-    && /usr/bin/composer install -vvv --no-interaction \
+    && /usr/bin/composer install --prefer-source --no-interaction --no-dev -o \
     && /usr/bin/composer dump-autoload \
     && php artisan key:generate \
     && rm -rf ~/.composer
