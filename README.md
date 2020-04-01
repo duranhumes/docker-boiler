@@ -1,5 +1,12 @@
 # Boilerplate
 
+## Requirements
+* **Docker**
+* **Docker Compose**
+
+## Run
+* **Run the script `./boot.sh` to run the application.**
+
 ## Built With
 
 * *[Lumen](https://lumen.laravel.com/) - The framework used*
