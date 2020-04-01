@@ -11,7 +11,7 @@ jobs:
 
             - name: Install composer dependencies
               run: |
-                  composer install --prefer-source --no-interaction --no-dev -o
+                  composer install -vvv --no-interaction --no-scripts
 
             - name: Prepare Application
               run: |
