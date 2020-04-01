@@ -1,0 +1,56 @@
+version: "3.3"
+
+services:
+    webapp:
+        restart: unless-stopped
+        image: webapp
+        container_name: webapp
+        env_file:
+            - .env
+        command: bash -c "./docker/install-deps.sh && /usr/bin/supervisord"
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - .:/srv/app
+        networks:
+            - webapp_network
+        depends_on:
+            - database
+        links:
+            - database
+        tty: true
+    scheduler:
+        restart: unless-stopped
+        image: webapp
+        container_name: scheduler
+        env_file:
+            - .env
+        command: bash -c "./docker/install-deps.sh && while true; do php artisan schedule:run --verbose --no-interaction; sleep 1; done"
+        volumes:
+            - .:/srv/app
+        networks:
+            - webapp_network
+        depends_on:
+            - database
+        links:
+            - database
+        tty: true
+    database:
+        restart: unless-stopped
+        image: mysql:8.0
+        container_name: database
+        env_file:
+            - .env
+        volumes:
+            - ./docker/mysql/data:/var/lib/mysql
+            - ./tables.sql:/docker-entrypoint-initdb.d/init.sql:ro
+            - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+        ports:
+            - "3306:3306"
+        networks:
+            - webapp_network
+        tty: true
+networks:
+    webapp_network:
+        driver: "bridge"

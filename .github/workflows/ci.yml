@@ -1,0 +1,22 @@
+name: Boilerplate
+on: push
+jobs:
+    CI:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 1
+
+            - name: Install composer dependencies
+              run: |
+                  composer install -vvv --no-interaction --no-scripts
+
+            - name: Prepare Application
+              run: |
+                  cp .env.example .env
+                  php artisan key:generate
+
+            - name: Run Testsuite
+              run: composer run ci
